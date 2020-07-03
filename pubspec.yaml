@@ -1,7 +1,7 @@
 name: bottom_bar_page_transition
 description: To display animation between pages while using bottom bar navigation.
-version: 1.0.0
-homepage: https://github.com/mdalameen
+version: 1.0.2
+homepage: https://github.com/mdalameen/bottom_bar_page_transition
 
 environment:
   sdk: ">=2.7.0 <3.0.0"
