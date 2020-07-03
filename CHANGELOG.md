@@ -9,4 +9,4 @@
 
 ## [1.0.1] - Changed preview image width.
 
-## [1.0.2] - Added repository link to pubspec.
+## [1.0.2] - Added repository link to package.
