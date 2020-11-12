@@ -65,8 +65,8 @@ class _BottomBarPageTransitionState extends State<BottomBarPageTransition>
 
   @override
   void dispose() {
-    super.dispose();
     _animationController.dispose();
+    super.dispose();
   }
 
   @override
@@ -82,11 +82,13 @@ class _BottomBarPageTransitionState extends State<BottomBarPageTransition>
       });
     }
 
+    bool canAnimate =
+        _animatingIndex != null && _displayingIndex != _animatingIndex;
+
     return Stack(
       children: <Widget>[
         widget.builder(context, _displayingIndex),
-        if (_animatingIndex != null &&
-            widget.transitionType == TransitionType.circular)
+        if (canAnimate && widget.transitionType == TransitionType.circular)
           ClipOval(
             child: widget.builder(context, _animatingIndex),
             clipper: _OvalClipper(
@@ -97,8 +99,7 @@ class _BottomBarPageTransitionState extends State<BottomBarPageTransition>
                     .animate(_animationController)
                     .value),
           ),
-        if (_animatingIndex != null &&
-            widget.transitionType == TransitionType.slide)
+        if (canAnimate && widget.transitionType == TransitionType.slide)
           SlideTransition(
             position: Tween<Offset>(
                     begin:
@@ -108,8 +109,7 @@ class _BottomBarPageTransitionState extends State<BottomBarPageTransition>
                 .animate(_animationController),
             child: widget.builder(context, _animatingIndex),
           ),
-        if (_animatingIndex != null &&
-            widget.transitionType == TransitionType.fade)
+        if (canAnimate && widget.transitionType == TransitionType.fade)
           FadeTransition(
             opacity: Tween<double>(begin: 0.0, end: 1.0)
                 .chain(CurveTween(curve: widget.transitionCurve))

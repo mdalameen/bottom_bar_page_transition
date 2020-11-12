@@ -10,3 +10,5 @@
 ## [1.0.1] - Changed preview image width.
 
 ## [1.0.2] - Added repository link to package.
+
+## [1.0.3] - Updated params in readme file & bug fixes
