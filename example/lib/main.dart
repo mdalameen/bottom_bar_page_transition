@@ -84,7 +84,7 @@ class _CircularHomePageState extends State<CircularHomePage>
             totalPage,
             (index) => BottomNavigationBarItem(
                   icon: Icon(icons[index]),
-                  title: Text(names[index]),
+                  label: names[index],
                 )));
   }
 

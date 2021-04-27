@@ -12,18 +12,12 @@ class BottomBarPageTransition extends StatefulWidget {
   final Curve transitionCurve;
 
   BottomBarPageTransition(
-      {@required this.builder,
-      @required this.currentIndex,
-      @required this.totalLength,
+      {required this.builder,
+      required this.currentIndex,
+      required this.totalLength,
       this.transitionType: TransitionType.circular,
       this.transitionCurve: Curves.easeIn,
-      this.transitionDuration: const Duration(milliseconds: 300)})
-      : assert(builder != null &&
-            currentIndex != null &&
-            totalLength != null &&
-            transitionType != null &&
-            transitionCurve != null &&
-            transitionDuration != null);
+      this.transitionDuration: const Duration(milliseconds: 300)});
 
   @override
   _BottomBarPageTransitionState createState() =>
@@ -32,11 +26,11 @@ class BottomBarPageTransition extends StatefulWidget {
 
 class _BottomBarPageTransitionState extends State<BottomBarPageTransition>
     with TickerProviderStateMixin {
-  int _displayingIndex;
-  int _animatingIndex;
-  int _tempAnimatingIndex;
-  int _index;
-  AnimationController _animationController;
+  int _displayingIndex = -1;
+  int _animatingIndex = -1;
+  int _tempAnimatingIndex = -1;
+  int _index = 0;
+  late AnimationController _animationController;
 
   @override
   void initState() {
@@ -48,14 +42,14 @@ class _BottomBarPageTransitionState extends State<BottomBarPageTransition>
       if (_animationController.status == AnimationStatus.forward) {
         _tempAnimatingIndex = _animatingIndex;
       } else if (_animationController.status == AnimationStatus.dismissed) {
-        if (_tempAnimatingIndex != null) _displayingIndex = _tempAnimatingIndex;
+        if (_tempAnimatingIndex != -1) _displayingIndex = _tempAnimatingIndex;
       }
 
       if (_animationController.status == AnimationStatus.completed) {
         _displayingIndex = _animatingIndex;
-        _animatingIndex = null;
+        _animatingIndex = -1;
         _animationController.stop();
-        _tempAnimatingIndex = null;
+        _tempAnimatingIndex = -1;
       }
 
       setState(() {});
@@ -71,10 +65,10 @@ class _BottomBarPageTransitionState extends State<BottomBarPageTransition>
 
   @override
   Widget build(BuildContext context) {
-    if (_displayingIndex == null) _displayingIndex = _index;
+    if (_displayingIndex == -1) _displayingIndex = _index;
     if (_index != widget.currentIndex) {
       _index = widget.currentIndex;
-      WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
         _animatingIndex = widget.currentIndex;
         _animationController.duration = widget.transitionDuration;
         _animationController.reset();
@@ -83,7 +77,7 @@ class _BottomBarPageTransitionState extends State<BottomBarPageTransition>
     }
 
     bool canAnimate =
-        _animatingIndex != null && _displayingIndex != _animatingIndex;
+        _animatingIndex != -1 && _displayingIndex != _animatingIndex;
 
     return Stack(
       children: <Widget>[

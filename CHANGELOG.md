@@ -12,3 +12,5 @@
 ## [1.0.2] - Added repository link to package.
 
 ## [1.0.3] - Updated params in readme file & bug fixes
+
+## [2.0.0] - Migration to null safety

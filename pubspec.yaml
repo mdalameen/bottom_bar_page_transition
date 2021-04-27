@@ -1,10 +1,10 @@
 name: bottom_bar_page_transition
 description: To display animation between pages while using bottom bar navigation.
-version: 1.0.3
+version: 2.0.0
 homepage: https://github.com/mdalameen/bottom_bar_page_transition
 
 environment:
-  sdk: ">=2.7.0 <3.0.0"
+  sdk: '>=2.12.0 <3.0.0'
 
 dependencies:
   flutter:
