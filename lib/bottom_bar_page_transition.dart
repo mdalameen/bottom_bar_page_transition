@@ -68,7 +68,7 @@ class _BottomBarPageTransitionState extends State<BottomBarPageTransition>
     if (_displayingIndex == -1) _displayingIndex = _index;
     if (_index != widget.currentIndex) {
       _index = widget.currentIndex;
-      WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
+      WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
         _animatingIndex = widget.currentIndex;
         _animationController.duration = widget.transitionDuration;
         _animationController.reset();
