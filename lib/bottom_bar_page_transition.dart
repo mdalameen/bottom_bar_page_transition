@@ -1,9 +1,18 @@
-library bottom_bar_page_transition;
-
-import 'package:flutter/material.dart';
 import 'dart:math' as math;
 
+import 'package:flutter/material.dart';
+
 class BottomBarPageTransition extends StatefulWidget {
+  const BottomBarPageTransition({
+    super.key,
+    required this.builder,
+    required this.currentIndex,
+    required this.totalLength,
+    this.transitionType = TransitionType.circular,
+    this.transitionCurve = Curves.easeIn,
+    this.transitionDuration = const Duration(milliseconds: 300),
+  });
+
   final IndexedWidgetBuilder builder;
   final int currentIndex;
   final int totalLength;
@@ -11,16 +20,8 @@ class BottomBarPageTransition extends StatefulWidget {
   final Duration transitionDuration;
   final Curve transitionCurve;
 
-  BottomBarPageTransition(
-      {required this.builder,
-      required this.currentIndex,
-      required this.totalLength,
-      this.transitionType: TransitionType.circular,
-      this.transitionCurve: Curves.easeIn,
-      this.transitionDuration: const Duration(milliseconds: 300)});
-
   @override
-  _BottomBarPageTransitionState createState() =>
+  State<BottomBarPageTransition> createState() =>
       _BottomBarPageTransitionState();
 }
 
@@ -35,8 +36,10 @@ class _BottomBarPageTransitionState extends State<BottomBarPageTransition>
   @override
   void initState() {
     super.initState();
-    _animationController =
-        AnimationController(vsync: this, duration: widget.transitionDuration);
+    _animationController = AnimationController(
+      vsync: this,
+      duration: widget.transitionDuration,
+    );
 
     _animationController.addListener(() {
       if (_animationController.status == AnimationStatus.forward) {
@@ -76,7 +79,7 @@ class _BottomBarPageTransitionState extends State<BottomBarPageTransition>
       });
     }
 
-    bool canAnimate =
+    final canAnimate =
         _animatingIndex != -1 && _displayingIndex != _animatingIndex;
 
     return Stack(
@@ -84,21 +87,22 @@ class _BottomBarPageTransitionState extends State<BottomBarPageTransition>
         widget.builder(context, _displayingIndex),
         if (canAnimate && widget.transitionType == TransitionType.circular)
           ClipOval(
-            child: widget.builder(context, _animatingIndex),
             clipper: _OvalClipper(
-                widget.currentIndex,
-                widget.totalLength,
-                Tween(begin: 0.0, end: 1.0)
-                    .chain(CurveTween(curve: widget.transitionCurve))
-                    .animate(_animationController)
-                    .value),
+              widget.currentIndex,
+              widget.totalLength,
+              Tween(begin: 0.0, end: 1.0)
+                  .chain(CurveTween(curve: widget.transitionCurve))
+                  .animate(_animationController)
+                  .value,
+            ),
+            child: widget.builder(context, _animatingIndex),
           ),
         if (canAnimate && widget.transitionType == TransitionType.slide)
           SlideTransition(
             position: Tween<Offset>(
-                    begin:
-                        Offset(_animatingIndex < _displayingIndex ? -1 : 1, 0),
-                    end: Offset.zero)
+              begin: Offset(_animatingIndex < _displayingIndex ? -1 : 1, 0),
+              end: Offset.zero,
+            )
                 .chain(CurveTween(curve: widget.transitionCurve))
                 .animate(_animationController),
             child: widget.builder(context, _animatingIndex),
@@ -109,31 +113,33 @@ class _BottomBarPageTransitionState extends State<BottomBarPageTransition>
                 .chain(CurveTween(curve: widget.transitionCurve))
                 .animate(_animationController),
             child: widget.builder(context, _animatingIndex),
-          )
+          ),
       ],
     );
   }
 }
 
 class _OvalClipper extends CustomClipper<Rect> {
-  int currentIndex;
-  int length;
-  double value;
-
   _OvalClipper(this.currentIndex, this.length, this.value);
+
+  final int currentIndex;
+  final int length;
+  final double value;
 
   @override
   Rect getClip(Size size) {
-    double step = currentIndex + size.width / length;
-    double halfStep = step / 2;
-    double d = math.sqrt(
-            (size.width + halfStep) + (size.height + 30) * (size.height + 30)) *
+    final step = currentIndex + size.width / length;
+    final halfStep = step / 2;
+    final d = math.sqrt(
+          (size.width + halfStep) + (size.height + 30) * (size.height + 30),
+        ) *
         2.5 *
         value;
     return Rect.fromCenter(
-        center: Offset((currentIndex * step) + halfStep, size.height + 30),
-        width: d,
-        height: d);
+      center: Offset((currentIndex * step) + halfStep, size.height + 30),
+      width: d,
+      height: d,
+    );
   }
 
   @override

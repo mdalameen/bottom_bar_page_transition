@@ -14,3 +14,7 @@
 ## [1.0.3] - Updated params in readme file & bug fixes
 
 ## [2.0.0] - Migration to null safety
+
+## [3.0.0] - Dart 3 / Flutter 3.47
+* Raised the Dart SDK constraint to `^3.13.0`.
+* Replaced removed named-parameter colon defaults and nullable `WidgetsBinding.instance`.
